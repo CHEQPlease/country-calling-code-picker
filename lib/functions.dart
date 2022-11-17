@@ -85,7 +85,7 @@ Future<Country?> showCountryPickerSheet(BuildContext context,
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 32),
               Expanded(
                 child: CountryPickerWidget(
                   onSelected: (country) => Navigator.of(context).pop(country),
