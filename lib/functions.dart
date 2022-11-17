@@ -114,16 +114,10 @@ Future<Country?> showCountryPickerDialog(
             child: Column(
               children: <Widget>[
                 SizedBox(height: 16),
-                Stack(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Positioned(
-                      right: 8,
-                      top: 4,
-                      bottom: 0,
-                      child: TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () => Navigator.pop(context)),
-                    ),
+                    Container(height: 60, width: 100,),
                     Center(
                       child: title ??
                           Text(
@@ -135,9 +129,13 @@ Future<Country?> showCountryPickerDialog(
                             ),
                           ),
                     ),
+                    Container(height: 60, width: 100, child: TextButton(
+                      child: Text('Cancel'),
+                      onPressed: () => Navigator.pop(context),),
+                    ),
                   ],
                 ),
-                SizedBox(height: 32),
+                SizedBox(height: 16),
                 Expanded(
                   child: CountryPickerWidget(
                     onSelected: (country) => Navigator.of(context).pop(country),
