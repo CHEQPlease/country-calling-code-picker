@@ -9,8 +9,9 @@ import './country.dart';
 
 ///This function returns list of countries
 Future<List<Country>> getCountries(BuildContext context) async {
-  String rawData = await DefaultAssetBundle.of(context).loadString(
-      'packages/country_calling_code_picker/raw/country_codes.json');
+  String rawData = await DefaultAssetBundle.of(
+    context,
+  ).loadString('packages/country_calling_code_picker/raw/country_codes.json');
   final parsed = json.decode(rawData.toString()).cast<Map<String, dynamic>>();
   return parsed.map<Country>((json) => new Country.fromJson(json)).toList();
 }
@@ -26,8 +27,10 @@ Future<Country> getDefaultCountry(BuildContext context) async {
     if (countryCode == null) {
       return list.first;
     }
-    return list.firstWhere((element) =>
-        element.countryCode.toLowerCase() == countryCode.toLowerCase());
+    return list.firstWhere(
+      (element) =>
+          element.countryCode.toLowerCase() == countryCode.toLowerCase(),
+    );
   } catch (e) {
     return list.first;
   }
@@ -35,113 +38,129 @@ Future<Country> getDefaultCountry(BuildContext context) async {
 
 ///This function returns an country whose [countryCode] matches with the passed one.
 Future<Country?> getCountryByCountryCode(
-    BuildContext context, String countryCode) async {
+  BuildContext context,
+  String countryCode,
+) async {
   final list = await getCountries(context);
   return list.firstWhere((element) => element.countryCode == countryCode);
 }
 
-Future<Country?> showCountryPickerSheet(BuildContext context,
-    {Widget? title,
-    Widget? cancelWidget,
-    double cornerRadius: 35,
-    bool focusSearchBox: false,
-    double heightFactor: 0.9}) {
-  assert(heightFactor <= 0.9 && heightFactor >= 0.4,
-      'heightFactor must be between 0.4 and 0.9');
+Future<Country?> showCountryPickerSheet(
+  BuildContext context, {
+  Widget? title,
+  Widget? cancelWidget,
+  double cornerRadius = 35,
+  bool focusSearchBox = false,
+  double heightFactor = 0.9,
+}) {
+  assert(
+    heightFactor <= 0.9 && heightFactor >= 0.4,
+    'heightFactor must be between 0.4 and 0.9',
+  );
   return showModalBottomSheet<Country?>(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(cornerRadius),
-              topRight: Radius.circular(cornerRadius))),
-      builder: (_) {
-        return Container(
-          height: MediaQuery.of(context).size.height * heightFactor,
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 16),
-              Stack(
-                children: <Widget>[
-                  cancelWidget ??
-                      Positioned(
-                        right: 8,
-                        top: 4,
-                        bottom: 0,
-                        child: TextButton(
-                            child: Text('Cancel'),
-                            onPressed: () => Navigator.pop(context)),
+    context: context,
+    isScrollControlled: true,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(cornerRadius),
+        topRight: Radius.circular(cornerRadius),
+      ),
+    ),
+    builder: (_) {
+      return Container(
+        height: MediaQuery.of(context).size.height * heightFactor,
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 16),
+            Stack(
+              children: <Widget>[
+                cancelWidget ??
+                    Positioned(
+                      right: 8,
+                      top: 4,
+                      bottom: 0,
+                      child: TextButton(
+                        child: Text('Cancel'),
+                        onPressed: () => Navigator.pop(context),
                       ),
-                  Center(
-                    child: title ??
-                        Text(
-                          'Choose region',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w500,
-                          ),
+                    ),
+                Center(
+                  child:
+                      title ??
+                      Text(
+                        'Choose region',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500,
                         ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 32),
-              Expanded(
-                child: CountryPickerWidget(
-                  onSelected: (country) => Navigator.of(context).pop(country),
+                      ),
                 ),
+              ],
+            ),
+            SizedBox(height: 32),
+            Expanded(
+              child: CountryPickerWidget(
+                onSelected: (country) => Navigator.of(context).pop(country),
               ),
-            ],
-          ),
-        );
-      });
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }
 
 Future<Country?> showCountryPickerDialog(
   BuildContext context, {
   Widget? title,
-  double cornerRadius: 35,
-  bool focusSearchBox: false,
+  double cornerRadius = 35,
+  bool focusSearchBox = false,
 }) {
   return showDialog<Country?>(
-      context: context,
-      barrierDismissible: true,
-      builder: (_) => Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-              Radius.circular(cornerRadius),
-            )),
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(height: 60, width: 100,),
-                    Center(
-                      child: title ??
-                          Text(
-                            'Choose region',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+    context: context,
+    barrierDismissible: true,
+    builder: (_) => Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(cornerRadius)),
+      ),
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(height: 60, width: 100),
+              Center(
+                child:
+                    title ??
+                    Text(
+                      'Choose region',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    Container(height: 60, width: 100, child: TextButton(
-                      child: Text('Cancel'),
-                      onPressed: () => Navigator.pop(context),),
-                    ),
-                  ],
+              ),
+              Container(
+                height: 60,
+                width: 100,
+                child: TextButton(
+                  child: Text('Cancel'),
+                  onPressed: () => Navigator.pop(context),
                 ),
-                SizedBox(height: 16),
-                Expanded(
-                  child: CountryPickerWidget(
-                    onSelected: (country) => Navigator.of(context).pop(country),
-                  ),
-                ),
-              ],
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Expanded(
+            child: CountryPickerWidget(
+              onSelected: (country) => Navigator.of(context).pop(country),
             ),
-          ));
+          ),
+        ],
+      ),
+    ),
+  );
 }
