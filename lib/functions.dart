@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:country_calling_code_picker/country_code_picker.dart';
+import 'package:device_region/device_region.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 
 import './country.dart';
 
@@ -23,7 +23,7 @@ Future<List<Country>> getCountries(BuildContext context) async {
 Future<Country> getDefaultCountry(BuildContext context) async {
   final list = await getCountries(context);
   try {
-    final countryCode = await FlutterSimCountryCode.simCountryCode;
+    final countryCode = await DeviceRegion.getSIMCountryCode();
     if (countryCode == null) {
       return list.first;
     }

@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_sim_country_code: ^0.1.2
+  device_region: ^1.4.0
 
 
 dev_dependencies:
