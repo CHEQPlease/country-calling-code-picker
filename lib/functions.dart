@@ -1,18 +1,17 @@
 import 'dart:convert';
+import 'dart:ui' show PlatformDispatcher;
 
 import 'package:country_calling_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 
-import './country.dart';
+import 'package:country_calling_code_picker/country.dart';
 
 ///This function returns list of countries
 Future<List<Country>> getCountries(BuildContext context) async {
   String rawData = await DefaultAssetBundle.of(context).loadString(
-      'packages/country_calling_code_picker/raw/country_codes.json');
+      'packages/country_calling_code_picker/raw/country_codes.json',);
   final parsed = json.decode(rawData.toString()).cast<Map<String, dynamic>>();
-  return parsed.map<Country>((json) => new Country.fromJson(json)).toList();
+  return parsed.map<Country>((json) => Country.fromJson(json)).toList();
 }
 
 ///This function returns an user's current country. User's sim country code is matched with the ones in the list.
@@ -22,12 +21,12 @@ Future<List<Country>> getCountries(BuildContext context) async {
 Future<Country> getDefaultCountry(BuildContext context) async {
   final list = await getCountries(context);
   try {
-    final countryCode = await FlutterSimCountryCode.simCountryCode;
+    final countryCode = PlatformDispatcher.instance.locale.countryCode;
     if (countryCode == null) {
       return list.first;
     }
     return list.firstWhere((element) =>
-        element.countryCode.toLowerCase() == countryCode.toLowerCase());
+        element.countryCode.toLowerCase() == countryCode.toLowerCase(),);
   } catch (e) {
     return list.first;
   }
@@ -35,7 +34,7 @@ Future<Country> getDefaultCountry(BuildContext context) async {
 
 ///This function returns an country whose [countryCode] matches with the passed one.
 Future<Country?> getCountryByCountryCode(
-    BuildContext context, String countryCode) async {
+    BuildContext context, String countryCode,) async {
   final list = await getCountries(context);
   return list.firstWhere((element) => element.countryCode == countryCode);
 }
@@ -43,20 +42,20 @@ Future<Country?> getCountryByCountryCode(
 Future<Country?> showCountryPickerSheet(BuildContext context,
     {Widget? title,
     Widget? cancelWidget,
-    double cornerRadius: 35,
-    bool focusSearchBox: false,
-    double heightFactor: 0.9}) {
+    double cornerRadius = 35,
+    bool focusSearchBox = false,
+    double heightFactor = 0.9,}) {
   assert(heightFactor <= 0.9 && heightFactor >= 0.4,
-      'heightFactor must be between 0.4 and 0.9');
+      'heightFactor must be between 0.4 and 0.9',);
   return showModalBottomSheet<Country?>(
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(cornerRadius),
-              topRight: Radius.circular(cornerRadius))),
+              topRight: Radius.circular(cornerRadius),),),
       builder: (_) {
-        return Container(
+        return SizedBox(
           height: MediaQuery.of(context).size.height * heightFactor,
           child: Column(
             children: <Widget>[
@@ -70,7 +69,7 @@ Future<Country?> showCountryPickerSheet(BuildContext context,
                         bottom: 0,
                         child: TextButton(
                             child: Text('Cancel'),
-                            onPressed: () => Navigator.pop(context)),
+                            onPressed: () => Navigator.pop(context),),
                       ),
                   Center(
                     child: title ??
@@ -94,14 +93,14 @@ Future<Country?> showCountryPickerSheet(BuildContext context,
             ],
           ),
         );
-      });
+      },);
 }
 
 Future<Country?> showCountryPickerDialog(
   BuildContext context, {
   Widget? title,
-  double cornerRadius: 35,
-  bool focusSearchBox: false,
+  double cornerRadius = 35,
+  bool focusSearchBox = false,
 }) {
   return showDialog<Country?>(
       context: context,
@@ -110,14 +109,14 @@ Future<Country?> showCountryPickerDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
               Radius.circular(cornerRadius),
-            )),
+            ),),
             child: Column(
               children: <Widget>[
                 SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(height: 60, width: 100,),
+                    SizedBox(height: 60, width: 100,),
                     Center(
                       child: title ??
                           Text(
@@ -129,7 +128,7 @@ Future<Country?> showCountryPickerDialog(
                             ),
                           ),
                     ),
-                    Container(height: 60, width: 100, child: TextButton(
+                    SizedBox(height: 60, width: 100, child: TextButton(
                       child: Text('Cancel'),
                       onPressed: () => Navigator.pop(context),),
                     ),
@@ -143,5 +142,5 @@ Future<Country?> showCountryPickerDialog(
                 ),
               ],
             ),
-          ));
+          ),);
 }

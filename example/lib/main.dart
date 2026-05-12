@@ -6,6 +6,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,6 +23,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -75,21 +79,21 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 100,
             ),
             MaterialButton(
-              child: Text('Select Country using full screen'),
               color: Colors.amber,
               onPressed: _onPressed,
+              child: Text('Select Country using full screen'),
             ),
             SizedBox(height: 24,),
             MaterialButton(
-              child: Text('Select Country using bottom sheet'),
               color: Colors.orange,
               onPressed: _onPressedShowBottomSheet,
+              child: Text('Select Country using bottom sheet'),
             ),
             SizedBox(height: 24,),
             MaterialButton(
-              child: Text('Select Country using dialog'),
               color: Colors.deepOrangeAccent,
               onPressed: _onPressedShowDialog,
+              child: Text('Select Country using dialog'),
             ),
           ],
         ),
@@ -99,9 +103,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onPressed() async {
     final country =
-        await Navigator.push(context, new MaterialPageRoute(builder: (context) {
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return PickerPage();
-    }));
+    },),);
     if (country != null) {
       setState(() {
         _selectedCountry = country;
@@ -133,6 +137,8 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class PickerPage extends StatelessWidget {
+  const PickerPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
